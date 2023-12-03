@@ -1,23 +1,27 @@
 import {
-    Route,
-    createBrowserRouter,
-    createRoutesFromElements,
-  } from "react-router-dom";
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 import WelcomeLayout from "../Layouts/welcomeLayout";
-import CodeRevieweRoutes from "../Layouts/MainLayout";
 import NoteFoundPageError from "../ErrorsPages/PageNoteFound";
-import { BASE, DASHBOARD, OTHERS } from "../../utils/constants/routeConstants";
+import {
+  BASE,
+  DASHBOARD,
+  DISEASEPRIDICTIONSYM,
+  OTHERS,
+} from "../../utils/constants/routeConstants";
+import DashRoutes from "../Layouts/MainLayout";
+import DiseasePridictionSym from "../../pages/dashboards/DiseasePridictionSym";
 
-  
-  const MyRoutes = createBrowserRouter(
-    createRoutesFromElements(
-      <Route  path={BASE} element={<WelcomeLayout />}>
-        <Route path={DASHBOARD} element={<CodeRevieweRoutes />}>
-  
-        </Route>
-        <Route path={OTHERS} element={<NoteFoundPageError />} />
+const MyRoutes = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path={BASE} element={<WelcomeLayout />}>
+      <Route path={DASHBOARD} element={<DashRoutes />}>
+        <Route path={DISEASEPRIDICTIONSYM} element={<DiseasePridictionSym />} />
       </Route>
-    )
-  );
-  export default MyRoutes;
-  
+      <Route path={OTHERS} element={<NoteFoundPageError />} />
+    </Route>
+  )
+);
+export default MyRoutes;

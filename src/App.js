@@ -1,17 +1,19 @@
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { CssBaseline,ThemeProvider } from "@mui/material";
 
 import { RouterProvider } from "react-router";
 import MyRoutes from "./components/Rootes";
+import { ColorModeContext,useMode } from "./theme";
 
 function App() {
-  const darkTheme = createTheme();
-
+  const [theme,colorMode]=useMode();
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ColorModeContext.Provider value={colorMode}>
+
+    <ThemeProvider theme={theme}>
       <RouterProvider router={MyRoutes} />
       <CssBaseline />
     </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
