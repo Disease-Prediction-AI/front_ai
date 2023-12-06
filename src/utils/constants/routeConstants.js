@@ -6,7 +6,9 @@ export const RESET = "reset";
 
 
 export const DASHBOARD ="dashboard";
-export const DISEASEPRIDICTIONSYM ="DiseasePridictionBySym";
+export const DISEASEPREDICTIONSYM ="DiseasePredictionBySym";
+
+export const CANCERPREDICTION = "CancerPrediction";
 
 
 

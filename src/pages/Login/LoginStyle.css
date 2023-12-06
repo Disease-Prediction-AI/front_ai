@@ -1,0 +1,49 @@
+.main {
+    width: 90%;
+    height: 650px;
+    margin: 40 auto;
+    border: 2px ;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .5);
+}
+
+.main .left {
+    float: left;    
+    width: 50%;
+    height: 100%;
+    background-size: cover;
+    box-sizing: border-box;
+}
+
+.dark {
+    background-image: url("../../assets/imgs/darkmodeBackground.jpg");
+}
+
+.light {
+    background-image: url("../../assets/imgs/lightmodeBackground.jpg");
+}
+
+.main .right {
+    float: right;
+    max-width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    position: relative;
+}
+
+.main .right .form {
+    width: 100%;
+    padding: 150px 40px 40px 10px;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.links .link1 {
+    float: left;
+    padding-left: 10px;
+}
+
+.links .link2 {
+    float: right;
+    padding-right: 10px;
+}

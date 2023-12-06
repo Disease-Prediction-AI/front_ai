@@ -40,7 +40,7 @@ const names = [
   "Kelly Snyder",
 ];
 
-const DiseasePridictionSym = () => {
+const DiseasePredictionSym = () => {
   const theme = useTheme();
   const [personName, setPersonName] = useState([]);
   const [tabValue, setTabValue] = useState(0);
@@ -188,4 +188,4 @@ const DiseasePridictionSym = () => {
   );
 };
 
-export default DiseasePridictionSym;
+export default DiseasePredictionSym;

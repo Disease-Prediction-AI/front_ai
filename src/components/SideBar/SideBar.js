@@ -3,21 +3,21 @@ import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+// import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PlayCircleFilledOutlinedIcon from "@mui/icons-material/PlayCircleFilledOutlined";
 import MonitorHeartOutlinedIcon from "@mui/icons-material/MonitorHeartOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+// import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+// import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+// import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { Tokens } from "../../utils/colors/Colors";
 import Oussama from "../../assets/imgs/mypic.png";
-import { DASHBOARD,DISEASEPRIDICTIONSYM } from "../../utils/constants/routeConstants";
+import { DISEASEPREDICTIONSYM } from "../../utils/constants/routeConstants";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -129,7 +129,7 @@ const SideBar = () => {
             </Typography>
             <Item
               title="Disease Prediction"
-              to= {DISEASEPRIDICTIONSYM}
+              to= {DISEASEPREDICTIONSYM}
               icon={<PlayCircleFilledOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -142,8 +142,8 @@ const SideBar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Liver Prediction"
-              to="/"
+              title="Lung Cancer Prediction"
+              to="/dashboard/CancerPrediction"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

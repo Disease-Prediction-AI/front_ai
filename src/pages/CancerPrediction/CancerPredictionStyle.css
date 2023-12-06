@@ -1,0 +1,13 @@
+.container {
+    height: 600px;
+    width: 60%;
+    margin: 30px auto;
+    /* background-color: beige; */
+}
+
+.container .image {
+    height: 230px;
+    width: 70%;
+    margin: 10px auto;
+    background-image: url("https://www.leral.net/photo/art/grande/75460268-52959207.jpg?v=1695728942");
+}
