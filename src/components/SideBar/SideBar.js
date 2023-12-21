@@ -49,6 +49,7 @@ const SideBar = () => {
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
           height: "100vh",
+          // display:"flex"
         },
 
         "& .pro-icon-wrapper": {

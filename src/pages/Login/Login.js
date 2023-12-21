@@ -54,8 +54,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="main" 
-      >
+      <div className="main">
         <div className={`left ${concept}`}>
           <Box display="flex" borderRadius="3px">
             <IconButton onClick={colorMode.toggleColorMode}>
