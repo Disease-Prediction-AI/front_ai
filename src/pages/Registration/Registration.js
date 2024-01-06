@@ -1,5 +1,4 @@
 import React from "react";
-
 import { useState, useContext, useEffect } from "react";
 import "./RegistrationStyle.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,10 +13,16 @@ import {
   useTheme,
 } from "@mui/material";
 import { ColorModeContext } from "../../theme";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../redux-toolkit/signup";
+import { useLocalState } from "../../utils/localStorage/CustomLocalStorage";
 
 const Registration = () => {
+  const [jwt, setJwt] = useLocalState("", "jwt");
+
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const dispatch = useDispatch();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -36,31 +41,57 @@ const Registration = () => {
     setconcept(theme.palette.mode === 'dark' ? 'dark' : 'light');
   }, [theme.palette.mode]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     setEmailError(false);
     setPasswordError(false);
-
+  
     if (firstName === "") {
       setfirstNameError(true);
     }
-    if (lastNameError === "") {
+    if (lastName === "") {
       setLastNameError(true);
     }
     if (email === "") {
       setEmailError(true);
     }
     if (password === "") {
-      setPassword(true);
+      setPasswordError(true);
     }
-
-    console.log(email, password);
-
-    // Redirect to the Dashboard
-    navigate("../dashboard");
+  
+    try {
+      const registrationData = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+  
+      // Dispatch the registration action
+      const rep = await dispatch(registerUser(registrationData));
+      console.log(rep);
+  
+      // Check if registration was successful
+      if (rep.payload && rep.payload.statusCode === 201) {
+        const token = rep.payload.data.token;
+  
+        // Save the token to your preferred storage (e.g., localStorage, cookies)
+        setJwt(token);
+  
+        // Redirect to the Dashboard
+        navigate("../dashboard");
+      } else {
+        // Handle unsuccessful registration
+        // You can access error information from rep.payload.message
+        console.error("Registration failed:", rep.payload.message);
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+      // Handle registration failure (e.g., display an error message)
+    }
   };
-
+  
   return (
     <>
       <div className="main">
@@ -128,18 +159,6 @@ const Registration = () => {
               fullWidth
               sx={{ mb: 3 }}
             />
-            {/* <TextField 
-                            label="Verify Password"
-                            required
-                            variant="outlined"
-                            color="secondary"
-                            type="password"
-                            value={password}
-                            error={passwordError}
-                            onChange={e => setPassword( e.target.value )}
-                            fullWidth
-                            sx={{mb: 3}}
-                        /> */}
             <Button
               variant="outlined"
               color="secondary"

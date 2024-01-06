@@ -17,7 +17,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 // import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { Tokens } from "../../utils/colors/Colors";
 import Oussama from "../../assets/imgs/mypic.png";
-import { DISEASEPREDICTIONSYM } from "../../utils/constants/routeConstants";
+import { DISEASEPREDICTIONSYM, PNEUMONIADICTION } from "../../utils/constants/routeConstants";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -36,9 +36,19 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     </MenuItem>
   );
 };
+function getUser() {
+  let user = localStorage.getItem("user");
+  if (user) {
+    user = JSON.parse(user);
+  } else {
+    user = null;
+  }
+  return user;
+}
 
 const SideBar = () => {
   const theme = useTheme();
+  const user = useState(getUser());
   const colors = Tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
@@ -49,6 +59,8 @@ const SideBar = () => {
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
           height: "100vh",
+          position: "fixed",
+
           // display:"flex"
         },
 
@@ -111,10 +123,10 @@ const SideBar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  oussama
+                  {user.firstName}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  bougach
+                  {user.lastName}
                 </Typography>
               </Box>
             </Box>
@@ -126,18 +138,18 @@ const SideBar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-               Disease Prediction
+              Disease Prediction
             </Typography>
             <Item
               title="Disease Prediction"
-              to= {DISEASEPREDICTIONSYM}
+              to={DISEASEPREDICTIONSYM}
               icon={<PlayCircleFilledOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Diabetes Prediction"
-              to="/"
+              title="PNEUMONIA DITECTION "
+              to={"/dashboard/Pneumonia"}
               icon={<MonitorHeartOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

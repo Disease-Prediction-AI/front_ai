@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/Headers/PagesHeader";
 import {
   Box,
@@ -15,6 +15,9 @@ import {
   Stack,
 } from "@mui/material";
 import { Tokens } from "../../utils/colors/Colors";
+import { useDispatch, useSelector } from "react-redux";
+import { predictDisease } from "../../redux-toolkit/predictDisease"; 
+import { symptomsList } from "./data/diseaseData"; 
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,38 +30,39 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 const DiseasePredictionSym = () => {
   const theme = useTheme();
-  const [personName, setPersonName] = useState([]);
+  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
   const [tabValue, setTabValue] = useState(0);
   const colors = Tokens(theme.palette.mode);
+  const dispatch = useDispatch();
+  const diseasePrediction = useSelector((state) => state.diseasePrediction);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
+    setSelectedSymptoms(typeof value === "string" ? value.split(",") : value);
   };
+  const handlClick = async()=>{
+    const rep =await dispatch(predictDisease(selectedSymptoms));
+    console.log(rep)
+
+
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
   const handleDelete = (chipToDelete) => () => {
-    setTabValue((chips) => chips.filter((chip) => chip !== chipToDelete));
+    setSelectedSymptoms((chips) => chips.filter((chip) => chip !== chipToDelete));
   };
+
+  useEffect(() => {
+    console.log(selectedSymptoms);
+
+  }, [ selectedSymptoms]);
 
   return (
     <Box>
@@ -78,34 +82,36 @@ const DiseasePredictionSym = () => {
               What are your Symptoms ?
             </Typography>
             <Select
-              multiple
-              displayEmpty
-              value={personName}
-              onChange={handleChange}
-              input={<OutlinedInput />}
-              renderValue={(selected) => {
-                if (selected.length === 0) {
-                  return <em>Placeholder</em>;
-                }
+  multiple
+  displayEmpty
+  value={selectedSymptoms}
+  onChange={handleChange}
+  input={<OutlinedInput />}
+  renderValue={(selected) => {
+    if (selected.length === 0) {
+      return <em>Placeholder</em>;
+    }
 
-                return selected.map((s) => (
-                  <Chip
-                    label={s}
-                    variant="outlined"
-                    color="info"
-                    onDelete={handleDelete(s)}
-                  />
-                ));
-              }}
-              MenuProps={MenuProps}
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              {names.map((name) => (
-                <MenuItem key={name} value={name}>
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
+    return selected.map((s) => (
+      <Chip
+        key={s}  // Add key prop here
+        label={s}
+        variant="outlined"
+        color="info"
+        onDelete={handleDelete(s)}
+      />
+    ));
+  }}
+  MenuProps={MenuProps}
+  inputProps={{ "aria-label": "Without label" }}
+>
+  {symptomsList.map((symptom) => (
+    <MenuItem key={symptom} value={symptom}>
+      {symptom}
+    </MenuItem>
+  ))}
+</Select>
+
           </FormControl>
         </Box>
 
@@ -120,6 +126,8 @@ const DiseasePredictionSym = () => {
             display: "flex",
             alignContent: "start",
           }}
+          onClick={handlClick}
+
         >
           Predict
         </Button>
@@ -129,7 +137,7 @@ const DiseasePredictionSym = () => {
           fontWeight="bold"
           sx={{ margin: "20px 0 20px 0" }}
         >
-          Disease: Typhoid With {ITEM_HEIGHT} % probability.
+          Disease: {diseasePrediction.disease} with {diseasePrediction.probability}% probability.
         </Typography>
         <Stack spacing={1}>
           <Stack>
@@ -153,32 +161,17 @@ const DiseasePredictionSym = () => {
             {tabValue === 0 && (
               <Box width={600}>
                 <Typography textAlign="start">
-                  Now we have devised robots that are much more complicated than
-                  any other machines we have ever had. They are complicated
-                  enough to do jobs that until now only human beings could do,
-                  but that are too simple for the marvellous brains we all have.
-                  The robots, even though they are smarter than other machines,
-                  are still only capable of very simple tasks - the kind of
-                  tasks human beings ought not to waste their time doing. In
-                  that case, why not let the robots do it? Why shouldn't human
-                  beings do other and better things? After all, whenever there
-                  is an important new invention, some jobs are lost. When the
-                  automobile came into use, there was a gradual, but steady,
-                  loss of jobs that involved horses.
+                  {diseasePrediction.description}
                 </Typography>
               </Box>
             )}
             {tabValue === 1 && (
               <Box width={600}>
-                  <Typography ml="30px" textAlign="start">
-                  1 . Now we have devised robots
-                </Typography>
-                  <Typography ml="30px" textAlign="start">
-                  2 . Now we have devised robots
-                </Typography>
-                <Typography ml="30px" textAlign="start">
-                  3 . Now we have devised robots
-                </Typography>
+                {diseasePrediction.precautions.map((precaution, index) => (
+                  <Typography key={index} ml="30px" textAlign="start">
+                    {precaution}
+                  </Typography>
+                ))}
               </Box>
             )}
           </Stack>

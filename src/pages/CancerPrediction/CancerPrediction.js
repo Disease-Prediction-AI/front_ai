@@ -11,8 +11,14 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
+import { Tokens } from "../../utils/colors/Colors";
+import { useTheme } from "@emotion/react";
 
 const CancerPrediction = () => {
+  const theme = useTheme();
+
+  const colors = Tokens(theme.palette.mode);
+
   const [formData, setFormData] = useState({
     name: "",
     gender: "",
@@ -67,10 +73,16 @@ const CancerPrediction = () => {
         <div className="image"></div>
 
         <div>
-          <Box sx={{ display: "flex", flexWrap: "wrap" }} >
+          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             <FormControl
               fullWidth
-              sx={{ ml: 5, mt: 2, mr: 5, mb: 2, "& label": { fontSize: "1rem" } }}
+              sx={{
+                ml: 5,
+                mt: 2,
+                mr: 5,
+                mb: 2,
+                "& label": { fontSize: "1rem" },
+              }}
               variant="filled"
             >
               <InputLabel htmlFor="">Name</InputLabel>
@@ -108,7 +120,8 @@ const CancerPrediction = () => {
               </TextField>
               <TextField
                 sx={{ ml: 2, mr: 2, mt: 2, "& label": { fontSize: "1rem" } }}
-                label="Filled"
+                label="age"
+                type="number"
                 variant="filled"
               />
 
@@ -127,7 +140,22 @@ const CancerPrediction = () => {
               {generateTextField("Chest Pain")}
             </Box>
           </Box>
-          <Button sx={{ ml: 5, mt: 1, mr: 5, mb: 1 }} variant="filled">
+
+          <Button
+            sx={{
+              backgroundColor: colors.greenAccent[700],
+              color: colors.grey[100],
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+              ml: 5,
+              mt: 1,
+              mr: 5,
+              mb: 1,
+              display: "flex",
+              alignContent: "start",
+            }}
+          >
             Predict Lung Cancer
           </Button>
         </div>

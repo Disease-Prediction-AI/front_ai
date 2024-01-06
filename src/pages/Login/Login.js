@@ -10,47 +10,60 @@ import {
   Checkbox,
   useTheme,
   IconButton,
-  Box
+  Box,
+  Alert,
+  AlertTitle,
+  Stack,
 } from "@mui/material";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { ColorModeContext } from "../../theme";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../redux-toolkit/auth/userSlice";
+import { useLocalState } from "../../utils/localStorage/CustomLocalStorage";
 
 const Login = () => {
+  const [jwt, setJwt] = useLocalState("", "jwt");
+
   const theme = useTheme();
+  const dispatch = useDispatch();
+
   const colorMode = useContext(ColorModeContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
 
   const navigate = useNavigate();
   const [concept, setconcept] = useState("");
+  // Reedux State
+  const { loading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
-    setconcept(theme.palette.mode === 'dark' ? 'dark' : 'light');
+    setconcept(theme.palette.mode === "dark" ? "dark" : "light");
   }, [theme.palette.mode]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    let userCredential = { email, password };
 
-    setEmailError(false);
-    setPasswordError(false);
+    try {
+      const rep = await dispatch(loginUser(userCredential));
+      console.log(rep.payload.token);
+      const token = rep.payload.token;
 
-    if (email === "") {
-      setEmailError(true);
+      // Check the response or navigate based on the logic you need
+      if (rep.payload) {
+        setJwt(token);
+        navigate("../dashboard");
+      } else {
+        // Handle unsuccessful login
+        // You can access error information from rep.error
+      }
+    } catch (error) {
+      // Handle any errors during dispatch
+      console.error("Error during login:", error);
     }
-    if (password === "") {
-      setPassword(true);
-    }
-
-    console.log(email, password);
-
-    // Redirect to the Dashboard
-    navigate("../dashboard");
   };
-
 
   return (
     <>
@@ -76,7 +89,6 @@ const Login = () => {
               color="secondary"
               type="email"
               value={email}
-              error={emailError}
               onChange={(e) => setEmail(e.target.value)}
               sx={{ mb: 3 }}
               fullWidth
@@ -88,7 +100,6 @@ const Login = () => {
               color="secondary"
               type="password"
               value={password}
-              error={passwordError}
               onChange={(e) => setPassword(e.target.value)}
               fullWidth
               sx={{ mb: 3 }}
@@ -104,7 +115,7 @@ const Login = () => {
               type="submit"
               fullWidth
             >
-              Login
+              {loading ? "Loading..." : "Login"}
             </Button>
             <br />
             <br />
@@ -116,6 +127,16 @@ const Login = () => {
                 </FormLabel>
               </Link>
             </div>
+            {error && (
+                  <Stack sx={{ width: '100%',  mt:5}} spacing={2}>
+
+              <Alert severity="error" sx={{ mt: 20}}>
+                <AlertTitle>Error</AlertTitle>
+                {
+"Acces denied  ! Invalid Credentials"                }
+              </Alert>
+              </Stack>
+            )}
           </form>
         </div>
       </div>
