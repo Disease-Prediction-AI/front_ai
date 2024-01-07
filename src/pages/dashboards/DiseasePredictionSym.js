@@ -69,11 +69,13 @@ const DiseasePredictionSym = () => {
       <Box margin="20px">
         <Header title="Disease Prediction" subtitle="Welcome to your Doctor" />
       </Box>
+      <Box mb="100px" />
+
       <Box
         display="flex"
         flexDirection="column"
         alignItems="center"
-        sx={{ margin: "20px" }}
+        sx={{ mt: "200px" }}
       >
         <Header title={"Disease prediction using Machine Learning"} />
         <Box sx={{ margin: "10px 0" }}>
@@ -135,59 +137,57 @@ const DiseasePredictionSym = () => {
           />
         )}
         <Typography
-        variant="h2"
-        color={colors.grey[100]}
-        fontWeight="bold"
-        sx={{ margin: "20px 0 20px 0" }}
-      >
-        {diseasePrediction ? (
-          `Disease: ${diseasePrediction.disease} with ${diseasePrediction.probability}% probability.`
-        ) : (
-          "No prediction available."
-        )}
-      </Typography>
+          variant="h2"
+          color={colors.grey[100]}
+          fontWeight="bold"
+          sx={{ margin: "20px 0 20px 0" }}
+        >
+          {diseasePrediction
+            ? `Disease: ${diseasePrediction.disease} with ${diseasePrediction.probability}% probability.`
+            : "No prediction available."}
+        </Typography>
 
-      <Stack spacing={1}>
-        <Stack>
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            sx={{
-              borderBottom: 1,
-              borderColor: "divider",
-              width: 600,
-              margin: "0 0 20px 0",
-            }}
-            indicatorColor="secondary"
-            textColor="secondary"
-          >
-            <Tab label="Description" />
-            <Tab label="Precautions" />
-          </Tabs>
+        <Stack spacing={1}>
+          <Stack>
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                width: 600,
+                margin: "0 0 20px 0",
+              }}
+              indicatorColor="secondary"
+              textColor="secondary"
+            >
+              <Tab label="Description" />
+              <Tab label="Precautions" />
+            </Tabs>
+          </Stack>
+          <Stack>
+            {tabValue === 0 && (
+              <Box width={600}>
+                <Typography textAlign="start">
+                  {diseasePrediction && diseasePrediction.description
+                    ? diseasePrediction.description
+                    : "No description available."}
+                </Typography>
+              </Box>
+            )}
+            {tabValue === 1 && (
+              <Box width={600}>
+                {diseasePrediction &&
+                  diseasePrediction.precautions.map((precaution, index) => (
+                    <Typography key={index} ml="30px" textAlign="start">
+                      {precaution}
+                    </Typography>
+                  ))}
+              </Box>
+            )}
+          </Stack>
         </Stack>
-        <Stack>
-          {tabValue === 0 && (
-            <Box width={600}>
-              <Typography textAlign="start">
-                {diseasePrediction && diseasePrediction.description
-                  ? diseasePrediction.description
-                  : "No description available."}
-              </Typography>
-            </Box>
-          )}
-          {tabValue === 1 && (
-            <Box width={600}>
-              {diseasePrediction &&
-                diseasePrediction.precautions.map((precaution, index) => (
-                  <Typography key={index} ml="30px" textAlign="start">
-                    {precaution}
-                  </Typography>
-                ))}
-            </Box>
-          )}
-        </Stack>
-      </Stack>
-    </Box>
+      </Box>
     </Box>
   );
 };

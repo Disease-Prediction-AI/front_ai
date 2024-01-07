@@ -14,6 +14,7 @@ import {
   PNEUMONIADICTION,
   OTHERS,
   REGISTRATION,
+  CHATBOOT,
 } from "../../utils/constants/routeConstants";
 import DashRoutes from "../Layouts/MainLayout";
 import DiseasePredictionSym from "../../pages/dashboards/DiseasePredictionSym";
@@ -22,6 +23,7 @@ import Login from "../../pages/Login/Login";
 import CancerPrediction from "../../pages/CancerPrediction/CancerPrediction";
 import Contact from "../dragAndDrop";
 import PrivateRoute from "./PrivateRoute";
+import ChatComponent from "../../pages/chatboot/ChatComponent";
 
 const MyRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +42,8 @@ const MyRoutes = createBrowserRouter(
         <Route path={DISEASEPREDICTIONSYM} element={<DiseasePredictionSym />} />
         <Route path={CANCERPREDICTION} element={<CancerPrediction />} />
         <Route path={PNEUMONIADICTION} element={<Contact />} />
+        <Route path={CHATBOOT} element={<ChatComponent />} />
+
       </Route>
 
       <Route path={OTHERS} element={<NoteFoundPageError />} />

@@ -54,7 +54,7 @@ const Login = () => {
       // Check the response or navigate based on the logic you need
       if (rep.payload) {
         setJwt(token);
-        navigate("../dashboard");
+        navigate("dashboard/DiseasePredictionBySym");
       } else {
         // Handle unsuccessful login
         // You can access error information from rep.error

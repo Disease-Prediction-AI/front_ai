@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from "react";
-import { Button, Container, Typography, Paper } from "@mui/material";
+import { Button, Container, Typography, Paper, Box } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage } from "../../redux-toolkit/upload-imgs/uploadImgSlice";
 import { useTheme } from "@emotion/react";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { Alert, AlertTitle } from "@mui/material"; // Import Alert and AlertTitle
 import "./drag.css";
+import Header from "../Headers/PagesHeader";
 
 const Pneumonia = () => {
   const theme = useTheme();
@@ -64,9 +66,15 @@ const Pneumonia = () => {
 
   return (
     <Container maxWidth="md" className="container" mt={4}>
-      <Typography variant="h4" color="primary" textAlign="center" mb={4}>
-        Pneumonia Prediction
-      </Typography>
+      <Box margin="20px">
+        <Header title="Pneumonia Prediction:" />
+      </Box>
+      <Typography
+        variant="h4"
+        color="primary"
+        textAlign="center"
+        mb={4}
+      ></Typography>
 
       <Paper
         elevation={3}
@@ -87,14 +95,15 @@ const Pneumonia = () => {
               style={{
                 borderRadius: "8px",
                 boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-                width: "100%",
+                width: "200px",
               }}
             />
           </div>
         ) : (
-          <Typography textAlign="center" variant="body1" mt={2} mb={2}>
-            Drag And drop Your Image X-ray here, or click Here to select files
-          </Typography>
+          <Header
+            title="Drag And drop Your Image X-ray"
+            subtitle="click Here to select files"
+          />
         )}
 
         {preview && (
@@ -108,21 +117,22 @@ const Pneumonia = () => {
             >
               Image Name: {imageName}
             </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              textAlign="center"
-              mt={2}
-              mb={2}
-            >
-              Caption: Your Caption Here
-            </Typography>
+
+            <Header subtitle="  Click Predict to see Your result  " />
           </div>
         )}
       </Paper>
 
       {preview && (
-        <div className="mb-5" style={{ display: "flex", justifyContent: "space-between", gap: '10px' ,marginTop:"50px"}}>
+        <div
+          className="mb-5"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "10px",
+            marginTop: "50px",
+          }}
+        >
           <Button
             variant="contained"
             color="success"
@@ -144,26 +154,44 @@ const Pneumonia = () => {
       )}
 
       {/* Display loading and error states */}
-      {loading && <Typography variant="body2" mt={2}>Loading...</Typography>}
+      {loading && (
+        <Typography variant="body2" mt={2}>
+          Loading...
+        </Typography>
+      )}
       {error && (
         <Typography variant="body2" color="error" mt={2}>
           Error: {error}
         </Typography>
       )}
+            <Box mb="80px" />
+
       {uploadResult && (
-        <div
-          className={`mb-5 ${
-            uploadResult.pneumonia_prediction === "NORMAL"
-              ? "success-message"
-              : "error-message"
-          }`}
+        <Alert
+          severity={
+            uploadResult.pneumonia_prediction === "NORMAL" ? "success" : "error"
+          }
+          sx={{
+            width: "50%",  // Set your desired width
+            backgroundColor: uploadResult.cancer_prediction === "NO"
+              ? colors.greenAccent[700]
+              : colors.redAccent[500],
+            color: colors.grey[100],
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginTop: "2rem",  // Adjust the margin-top as needed
+          }}
+          className="mb-3"
         >
-          <Typography variant="h5" mt={2}>
+          <AlertTitle>
             {uploadResult.pneumonia_prediction === "NORMAL"
-              ? "Be happy! Your result is normal."
-              : "Sorry, you have PNEUMONIA."}
-          </Typography>
-        </div>
+              ? "NORMAL"
+              : "PNEUMONIA"}
+          </AlertTitle>
+          {uploadResult.pneumonia_prediction === "NORMAL"
+            ? "This is a Nigative Resulte."
+            : "This is an positive Resulte."}
+        </Alert>
       )}
     </Container>
   );

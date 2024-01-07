@@ -6,14 +6,25 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 // import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
 import SearchIcon from "@mui/icons-material/Search";
 import { ColorModeContext } from "../../theme";
 import { Tokens } from "../../utils/colors/Colors";
+import { useNavigate } from "react-router";
+import { useLocalState } from "../../utils/localStorage/CustomLocalStorage";
 
 const NavBar = () => {
   const theme = useTheme();
   const colors = Tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+  const navigate = useNavigate("");
+  const [jwt, setJwt] = useLocalState("", "jwt");
+
+  const handleLogout = () => {
+    setJwt(null);
+    navigate("/");
+  }
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
@@ -33,12 +44,10 @@ const NavBar = () => {
           {theme.palette.mode === "dark" ? <DarkModeIcon /> : <LightModeIcon />}
         </IconButton>
         
-        <IconButton>
-          <NotificationsNoneOutlinedIcon />
-        </IconButton>
+      
         
-        <IconButton>
-          <PersonOutlineOutlinedIcon />
+        <IconButton onClick={handleLogout}>
+          <ExitToAppIcon />
         </IconButton>
       </Box>
     </Box>

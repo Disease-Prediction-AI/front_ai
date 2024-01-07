@@ -10,6 +10,8 @@ import {
   FilledInput,
   MenuItem,
   Button,
+  AlertTitle,
+  Alert,
 } from "@mui/material";
 import { Tokens } from "../../utils/colors/Colors";
 import { useTheme } from "@emotion/react";
@@ -17,35 +19,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { predictLungCancer } from "../../redux-toolkit/CancerPrediction";
 
 const CancerPrediction = () => {
-  const theme = useTheme();
+
   const dispatch = useDispatch();
-  const prediction = useSelector((state) => state.prediction.prediction);
+  const result = useSelector((state) => state.prediction.result);
   const loading = useSelector((state) => state.prediction.loading);
-  const error = useSelector((state) => state.prediction.error);
+  const uploadResult = useSelector((state) => state.prediction.uploadResult);
+  const theme = useTheme();
 
   const colors = Tokens(theme.palette.mode);
-  const handlePredictLungCancer = () => {
-    const rep = dispatch(predictLungCancer(formData));
-    console.log(rep);
-  };
 
   const [formData, setFormData] = useState({
-    name: "",
-    gender: "",
+    name: "oussama",
+    gender: "M",
     age: 0,
-    smoking: "",
-    YellowFingers: "",
-    PeerPresure: "",
-    ChronicDisease: "",
-    Fatigue: "",
-    Allergy: "",
-    Wheezing: "",
-    AlcoholCunsuming: "",
-    Coughing: "",
-    ShortnessBreath: "",
-    SwallowingDifficulty: "",
-    ChestPain: "",
+    anxiety:"NO",
+    smoking: "NO",
+    yellowFingers: "NO",
+    peerPressure: "NO",
+    chronicDisease: "NO",
+    fatigue: "NO",
+    allergy: "NO",
+    wheezing: "NO",
+    alcoholConsuming: "NO",
+    coughing: "NO",
+    shortnessOfBreath: "NO",
+    swallowingDifficulty: "NO",
+    chestPain: "NO",
   });
+  const handlePredict = async () => {
+    const rep = await dispatch(predictLungCancer(formData));
+  const prediction =rep.payload.data.data.prediction.cancer_prediction;
+  console.log(formData)
+  console.log(prediction)
+  
+  };
 
   const handleInputChange = (field, value) => {
     setFormData((prevData) => ({
@@ -53,7 +60,6 @@ const CancerPrediction = () => {
       [field]: value,
     }));
 
-    console.log(field, value);
   };
 
   const generateTextField = (label, defaultValue = "No") => (
@@ -72,18 +78,20 @@ const CancerPrediction = () => {
         )
       }
     >
-      <MenuItem value="Yes">Yes</MenuItem>
-      <MenuItem value="No">No</MenuItem>
+      <MenuItem value="YES">Yes</MenuItem>
+      <MenuItem value="NO">No</MenuItem>
     </TextField>
   );
 
   return (
     <>
-      <div className="container">
+      <div className="section">
         <div className="image"></div>
 
         <div>
-          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+          <Box
+            sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+          >
             <FormControl
               fullWidth
               sx={{
@@ -125,8 +133,8 @@ const CancerPrediction = () => {
                 value={formData.gender}
                 onChange={(e) => handleInputChange("gender", e.target.value)}
               >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="M">Male</MenuItem>
+                <MenuItem value="F">Female</MenuItem>
               </TextField>
               <TextField
                 sx={{ ml: 2, mr: 2, mt: 2, "& label": { fontSize: "1rem" } }}
@@ -136,7 +144,7 @@ const CancerPrediction = () => {
               />
 
               {generateTextField("Smoking")}
-              {generateTextField("Yellow Fingersz")}
+              {generateTextField("Yellow Fingers")}
               {generateTextField("Anxiety")}
               {generateTextField("Peer Presure")}
               {generateTextField("Chronic Disease")}
@@ -150,6 +158,7 @@ const CancerPrediction = () => {
               {generateTextField("Chest Pain")}
             </Box>
           </Box>
+
           <Button
             sx={{
               backgroundColor: colors.greenAccent[700],
@@ -157,17 +166,43 @@ const CancerPrediction = () => {
               fontSize: "14px",
               fontWeight: "bold",
               padding: "10px 20px",
-              ml: 5,
-              mt: 1,
-              mr: 5,
+              ml: "auto",
+              mt: "4rem",
+              mr: "auto",
               mb: 1,
               display: "flex",
               alignContent: "start",
             }}
-            onClick={handlePredictLungCancer}
+            onClick={handlePredict}
           >
-            Predict Lung Cancer
+            {loading ? "Predicting..." : "Predict Lung Cancer"}
           </Button>
+          {uploadResult && (
+                <Alert
+                severity={uploadResult.cancer_prediction === "NO" ? "success" : "error"}
+                sx={{
+                  width: "50%",  // Set your desired width
+                  backgroundColor: uploadResult.cancer_prediction === "NO"
+                    ? colors.greenAccent[700]
+                    : colors.redAccent[500],
+                  color: colors.grey[100],
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  marginTop: "2rem",  // Adjust the margin-top as needed
+                }}
+                className="mb-3"
+              >
+                <AlertTitle>
+                  {uploadResult.cancer_prediction === "NO"
+                    ? "NORMAL"
+                    : "Cancer"}
+                </AlertTitle>
+                {uploadResult.cancer_prediction === "NO"
+                  ? "This is a Negative Result."
+                  : "This is a Positive Result."}
+              </Alert>
+      
+      )}
         </div>
       </div>
     </>

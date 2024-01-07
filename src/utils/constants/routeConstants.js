@@ -9,5 +9,7 @@ export const DISEASEPREDICTIONSYM = "DiseasePredictionBySym";
 
 export const CANCERPREDICTION = "CancerPrediction";
 export const PNEUMONIADICTION = "Pneumonia";
+export const CHATBOOT = "chatboot";
+
 
 export const OTHERS = "*";

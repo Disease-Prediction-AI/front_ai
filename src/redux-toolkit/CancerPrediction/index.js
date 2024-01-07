@@ -1,45 +1,45 @@
-// predictionSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Define the initial state
 const initialState = {
   loading: false,
   error: null,
   prediction: null,
 };
 
-// Define an async thunk for making the API request
 export const predictLungCancer = createAsyncThunk(
   'prediction/predictLungCancer',
   async (patientInfo, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:8080/api/lung-cancer/predict', patientInfo);
-      return response.data.data.prediction.cancerPrediction;
+      return response
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
   }
 );
 
-// Create a slice of the Redux store
 const predictionSlice = createSlice({
   name: 'prediction',
   initialState,
-  reducers: {}, // You don't have any reducers here, so this block can be omitted
+  reducers: {}, 
   extraReducers: (builder) => {
     builder
       .addCase(predictLungCancer.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.uploadResult = null;
       })
       .addCase(predictLungCancer.fulfilled, (state, action) => {
         state.loading = false;
         state.prediction = action.payload;
+        state.uploadResult = action.payload.data.data ? action.payload.data.data.prediction : null;
+
       })
       .addCase(predictLungCancer.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+
       });
   },
 });
