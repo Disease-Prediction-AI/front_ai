@@ -13,28 +13,38 @@ import {
 } from "@mui/material";
 import { Tokens } from "../../utils/colors/Colors";
 import { useTheme } from "@emotion/react";
+import { useDispatch, useSelector } from "react-redux";
+import { predictLungCancer } from "../../redux-toolkit/CancerPrediction";
 
 const CancerPrediction = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const prediction = useSelector((state) => state.prediction.prediction);
+  const loading = useSelector((state) => state.prediction.loading);
+  const error = useSelector((state) => state.prediction.error);
 
   const colors = Tokens(theme.palette.mode);
+  const handlePredictLungCancer = () => {
+    const rep = dispatch(predictLungCancer(formData));
+    console.log(rep);
+  };
 
   const [formData, setFormData] = useState({
     name: "",
     gender: "",
     age: 0,
-    smoking: "No",
-    YellowFingers: "No",
-    PeerPresure: "No",
-    ChronicDisease: "No",
-    Fatigue: "No",
-    Allergy: "No",
-    Wheezing: "No",
-    AlcoholCunsuming: "No",
-    Coughing: "No",
-    ShortnessBreath: "No",
-    SwallowingDifficulty: "No",
-    ChestPain: "No",
+    smoking: "",
+    YellowFingers: "",
+    PeerPresure: "",
+    ChronicDisease: "",
+    Fatigue: "",
+    Allergy: "",
+    Wheezing: "",
+    AlcoholCunsuming: "",
+    Coughing: "",
+    ShortnessBreath: "",
+    SwallowingDifficulty: "",
+    ChestPain: "",
   });
 
   const handleInputChange = (field, value) => {
@@ -126,7 +136,7 @@ const CancerPrediction = () => {
               />
 
               {generateTextField("Smoking")}
-              {generateTextField("Yellow Fingers")}
+              {generateTextField("Yellow Fingersz")}
               {generateTextField("Anxiety")}
               {generateTextField("Peer Presure")}
               {generateTextField("Chronic Disease")}
@@ -140,7 +150,6 @@ const CancerPrediction = () => {
               {generateTextField("Chest Pain")}
             </Box>
           </Box>
-
           <Button
             sx={{
               backgroundColor: colors.greenAccent[700],
@@ -155,6 +164,7 @@ const CancerPrediction = () => {
               display: "flex",
               alignContent: "start",
             }}
+            onClick={handlePredictLungCancer}
           >
             Predict Lung Cancer
           </Button>

@@ -35,7 +35,7 @@ const pneumoniaSlice = createSlice({
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.loading = false;
-        state.uploadResult = action.payload;
+        state.uploadResult = action.payload.data ? action.payload.data.prediction : null;
       })
       .addCase(uploadImage.rejected, (state, action) => {
         state.loading = false;
@@ -43,6 +43,8 @@ const pneumoniaSlice = createSlice({
       });
   },
 });
+
+
 
 export const selectPneumonia = (state) => state.pneumonia;
 

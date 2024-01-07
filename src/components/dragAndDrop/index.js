@@ -1,15 +1,15 @@
 import React, { useCallback, useState } from "react";
-import { Button, Container } from "@mui/material";
+import { Button, Container, Typography, Paper } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import { useDispatch, useSelector } from "react-redux"; // Import useSelector
-import "./drag.css";
-import { useTheme } from "@emotion/react";
-import { Tokens } from "../../utils/colors/Colors";
+import { useDispatch, useSelector } from "react-redux";
 import { uploadImage } from "../../redux-toolkit/upload-imgs/uploadImgSlice";
+import { useTheme } from "@emotion/react";
+import CancelIcon from "@mui/icons-material/Cancel";
+import "./drag.css";
 
-function Pneumonia() {
+const Pneumonia = () => {
   const theme = useTheme();
-  const colors = Tokens(theme.palette.mode) || {};
+  const colors = theme.palette.mode || {};
   const [preview, setPreview] = useState(null);
   const [imageName, setImageName] = useState(null);
   const dispatch = useDispatch();
@@ -43,88 +43,130 @@ function Pneumonia() {
 
     if (typeof acceptedFiles[0] === "undefined") return;
 
-    // Create a FormData object and append the file to it
     const formData = new FormData();
     formData.append("image", acceptedFiles[0]);
 
-    // Dispatch the async thunk to upload the image
     try {
-      await dispatch(uploadImage(formData));
+      const response = await dispatch(uploadImage(formData));
+
+      // Assuming your response has a 'pneumonia_prediction' property
+      console.log(response.pneumonia_prediction);
+
+      // Handle the 'pneumonia_prediction' object as needed
     } catch (error) {
       console.error("Error uploading image:", error.message);
     }
   };
 
-  // Access the upload result, loading, and error from the Redux store
   const { loading, error, uploadResult } = useSelector(
     (state) => state.pneumonia
   );
 
-  // Log the results
-  console.log("Loading:", loading);
-  console.log("Error:", error);
-  console.log("Upload Result:", uploadResult);
-
   return (
-    <Container className="container">
-      <h1 className="text-6xl font-black text-center text-slate-900 mb-20">
-        Pneumonia
-      </h1>
+    <Container maxWidth="md" className="container" mt={4}>
+      <Typography variant="h4" color="primary" textAlign="center" mb={4}>
+        Pneumonia Prediction
+      </Typography>
 
-      <form
-        className="max-w-md border border-gray-200 rounded p-6 mx-auto"
-        onSubmit={handleOnSubmit}
+      <Paper
+        elevation={3}
+        className={`mb-5 dropzone ${isDragActive || preview ? "active" : ""}`}
+        {...getRootProps()}
       >
-        <div
-          className={`mb-5 dropzone ${isDragActive ? "active" : ""}`}
-          {...getRootProps()}
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the Image here ...</p>
-          ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
-          )}
-        </div>
-        {preview && (
-          <div className="mb-5">
-            <img src={preview} alt="Upload preview" className="preview-image" />
-            <Button
-              sx={{
-                backgroundColor:
-                  colors.greenAccent?.[500] || colors.greenAccent || "",
-                color: colors.grey?.[100] || colors.grey || "",
-                fontSize: "14px",
-                fontWeight: "bold",
-                padding: "10px 20px",
-                mt: 3,
-                display: "inline-block",
-                marginLeft: "10px",
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <Typography textAlign="center" variant="body1" mt={2} mb={2}>
+            Drop the Image here ...
+          </Typography>
+        ) : preview ? (
+          <div style={{ maxHeight: "150px", overflow: "hidden" }} mt={2} mb={2}>
+            <img
+              src={preview}
+              alt="Upload preview"
+              className="preview-image"
+              style={{
+                borderRadius: "8px",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                width: "100%",
               }}
-              onClick={handleCancel}
+            />
+          </div>
+        ) : (
+          <Typography textAlign="center" variant="body1" mt={2} mb={2}>
+            Drag And drop Your Image X-ray here, or click Here to select files
+          </Typography>
+        )}
+
+        {preview && (
+          <div className="mb-3">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              textAlign="center"
+              mt={2}
+              mb={2}
             >
-              Cancel
-            </Button>
+              Image Name: {imageName}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              textAlign="center"
+              mt={2}
+              mb={2}
+            >
+              Caption: Your Caption Here
+            </Typography>
           </div>
         )}
-        <Button
-          sx={{
-            backgroundColor:
-              colors.greenAccent?.[700] || colors.greenAccent || "",
-            color: colors.grey?.[100] || colors.grey || "",
-            fontSize: "14px",
-            fontWeight: "bold",
-            padding: "10px 20px",
-            mt: 3,
-            display: "inline-block",
-          }}
-          type="submit"
+      </Paper>
+
+      {preview && (
+        <div className="mb-5" style={{ display: "flex", justifyContent: "space-between", gap: '10px' ,marginTop:"50px"}}>
+          <Button
+            variant="contained"
+            color="success"
+            size="large"
+            onClick={handleOnSubmit}
+          >
+            Predict pneumonia
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            startIcon={<CancelIcon />}
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+        </div>
+      )}
+
+      {/* Display loading and error states */}
+      {loading && <Typography variant="body2" mt={2}>Loading...</Typography>}
+      {error && (
+        <Typography variant="body2" color="error" mt={2}>
+          Error: {error}
+        </Typography>
+      )}
+      {uploadResult && (
+        <div
+          className={`mb-5 ${
+            uploadResult.pneumonia_prediction === "NORMAL"
+              ? "success-message"
+              : "error-message"
+          }`}
         >
-          Predict Lung Cancer
-        </Button>
-      </form>
+          <Typography variant="h5" mt={2}>
+            {uploadResult.pneumonia_prediction === "NORMAL"
+              ? "Be happy! Your result is normal."
+              : "Sorry, you have PNEUMONIA."}
+          </Typography>
+        </div>
+      )}
     </Container>
   );
-}
+};
 
 export default Pneumonia;
