@@ -171,16 +171,16 @@ const Pneumonia = () => {
           severity={
             uploadResult.pneumonia_prediction === "NORMAL" ? "success" : "error"
           }
-          sx={{
-            width: "50%",  // Set your desired width
-            backgroundColor: uploadResult.cancer_prediction === "NO"
-              ? colors.greenAccent[700]
-              : colors.redAccent[500],
-            color: colors.grey[100],
-            marginLeft: "auto",
-            marginRight: "auto",
-            marginTop: "2rem",  // Adjust the margin-top as needed
-          }}
+          // sx={{
+          //   width: "50%",  // Set your desired width
+          //   backgroundColor: uploadResult.cancer_prediction === "NO"
+          //     ? colors.greenAccent[700]
+          //     : colors.redAccent[500],
+          //   color: colors.grey[100],
+          //   marginLeft: "auto",
+          //   marginRight: "auto",
+          //   marginTop: "2rem",  // Adjust the margin-top as needed
+          // }}
           className="mb-3"
         >
           <AlertTitle>
