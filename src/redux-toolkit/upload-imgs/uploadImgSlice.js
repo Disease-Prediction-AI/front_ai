@@ -6,7 +6,7 @@ export const uploadImage = createAsyncThunk(
   "pneumonia/uploadImage",
   async (formData) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/pneumonia/upload", formData, {
+      const response = await axios.post("https://ai.redahimmi.tech/api/pneumonia/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

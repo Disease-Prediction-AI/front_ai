@@ -12,7 +12,7 @@ const ChatComponent = () => {
     const fetchConversation = async () => {
       const conversationId = localStorage.getItem("conversationId");
       if (conversationId) {
-        const response = await fetch(`/api/conversation/${conversationId}`);
+        const response = await fetch(`https://ai.redahimmi.tech/api/conversation/${conversationId}`);
         const data = await response.json();
         if (!data.error) {
           setConversation(data);
@@ -53,7 +53,7 @@ const ChatComponent = () => {
     ];
     setConversation({ conversation: newConversation });
     setUserMessage("");
-    const response = await fetch(`/api/conversation/${conversationId}`, {
+    const response = await fetch(`https://ai.redahimmi.tech/api/conversation/${conversationId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ conversation: newConversation }),

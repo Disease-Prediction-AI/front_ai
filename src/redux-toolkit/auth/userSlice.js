@@ -3,7 +3,7 @@ import axios from "axios"; // Import Axios library
 
 export const loginUser = createAsyncThunk("user/login", async (userCredentials) => {
   try {
-    const response = await axios.post("http://localhost:8080/api/auth/authenticate", userCredentials);
+    const response = await axios.post("https://ai.redahimmi.tech/api/auth/authenticate", userCredentials);
     return response.data; 
   } catch (error) {
     throw error;

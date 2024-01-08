@@ -6,7 +6,7 @@ export const predictDisease = createAsyncThunk(
   async (data) => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/symptoms/diagnose",
+        "https://ai.redahimmi.tech/api/symptoms/diagnose",
         {
           symptoms: data,
         }

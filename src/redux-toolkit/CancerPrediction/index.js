@@ -11,7 +11,7 @@ export const predictLungCancer = createAsyncThunk(
   'prediction/predictLungCancer',
   async (patientInfo, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/lung-cancer/predict', patientInfo);
+      const response = await axios.post('https://ai.redahimmi.tech/api/lung-cancer/predict', patientInfo);
       return response
     } catch (error) {
       return rejectWithValue(error.response.data.message);

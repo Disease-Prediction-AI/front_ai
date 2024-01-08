@@ -5,7 +5,7 @@ export const registerUser = createAsyncThunk(
   async (userData) => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
+        "https://ai.redahimmi.tech/api/auth/register",
         userData
       );
       return response.data;
